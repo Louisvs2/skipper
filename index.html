@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Skipper</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <span class="logo">Skipper</span>
+    <span class="sub">BPM time &amp; gate effects</span>
+  </header>
+
+  <section class="fx">
+    <div class="row"><label for="bpm">BPM</label><input id="bpm" type="number" min="20" max="400" step="0.01"></div>
+    <div class="row"><label for="downbeat">Downbeat (s)</label>
+      <span class="combo"><input id="downbeat" type="number" step="0.001"><button id="btnPlayhead" title="Playhead-Position als Downbeat übernehmen">⌖</button></span>
+    </div>
+    <div class="row"><label for="timeSlot">Time slot</label><select id="timeSlot"></select></div>
+    <div class="row"><label for="gateSlot">Gate slot</label><select id="gateSlot"></select></div>
+    <div class="row"><label for="linkSlots">Link slots</label><input id="linkSlots" type="checkbox"></div>
+    <div class="row"><label for="timeMix">Time mix</label><span class="combo"><input id="timeMix" type="range" min="0" max="100"><output for="timeMix"></output></span></div>
+    <div class="row"><label for="gateMix">Gate mix</label><span class="combo"><input id="gateMix" type="range" min="0" max="100"><output for="gateMix"></output></span></div>
+    <div class="row"><label for="gateTarget">Gate target</label>
+      <select id="gateTarget">
+        <option value="video">Video (Opacity)</option>
+        <option value="audio">Audio (Volume)</option>
+        <option value="both">Video + Audio</option>
+      </select>
+    </div>
+    <div class="row"><label for="attack">Gate attack (frames)</label><input id="attack" type="number" min="0" max="24" step="1"></div>
+    <div class="row"><label for="release">Gate release (frames)</label><input id="release" type="number" min="0" max="24" step="1"></div>
+    <div class="row"><label for="frameMode">Frame mode</label>
+      <select id="frameMode">
+        <option value="sampling">Frame Sampling</option>
+        <option value="blending">Frame Blending</option>
+        <option value="optical">Optical Flow</option>
+      </select>
+    </div>
+    <div class="row"><label for="jump">Jump dissolve (frames)</label><input id="jump" type="number" min="0" max="12" step="1"></div>
+  </section>
+
+  <section id="userGrid" class="grid" hidden>
+    <div class="gridTitle">Gate-Raster (16tel) – zum Umschalten klicken</div>
+    <div id="cells" class="cells"></div>
+  </section>
+
+  <section class="preview">
+    <canvas id="preview" width="600" height="190"></canvas>
+    <div class="legend"><span class="lt">Linie: Quellposition über 1 Takt</span><span class="lg">Balken: Gate</span></div>
+  </section>
+
+  <section class="actions">
+    <button id="btnApply" class="primary">Apply</button>
+    <button id="btnReset">Reset</button>
+  </section>
+  <div id="status" class="status">Clip in der Timeline markieren, dann „Apply“.</div>
+
+  <script src="js/patterns.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
