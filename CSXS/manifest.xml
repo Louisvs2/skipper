@@ -29,8 +29,8 @@
           <Type>Panel</Type>
           <Menu>Skipper</Menu>
           <Geometry>
-            <Size><Height>620</Height><Width>340</Width></Size>
-            <MinSize><Height>400</Height><Width>280</Width></MinSize>
+            <Size><Height>440</Height><Width>320</Width></Size>
+            <MinSize><Height>300</Height><Width>260</Width></MinSize>
           </Geometry>
         </UI>
       </DispatchInfo>

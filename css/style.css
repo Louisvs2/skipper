@@ -13,9 +13,8 @@
 html, body { margin: 0; background: var(--bg); color: var(--text); font: 12px/1.4 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
 body { padding: 10px 12px 14px; }
 
-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+header { margin-bottom: 8px; }
 .logo { font-size: 18px; font-weight: 700; font-style: italic; letter-spacing: -0.5px; color: #fff; }
-.sub { color: var(--muted); font-size: 11px; }
 
 .fx { background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 4px 8px; }
 .row { display: grid; grid-template-columns: 1fr 1.25fr; align-items: center; gap: 8px; min-height: 26px; }
@@ -42,22 +41,14 @@ button.primary { background: var(--accent); border-color: var(--accent); color: 
 button.primary:hover { background: #3f99f0; }
 button:disabled { opacity: .5; cursor: default; }
 #btnPlayhead { padding: 3px 8px; }
-
-.grid { margin-top: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; }
-.gridTitle { color: var(--muted); margin-bottom: 6px; }
-.cells { display: grid; grid-template-columns: repeat(16, 1fr); gap: 2px; }
-.cell { height: 20px; background: #333; border-radius: 2px; cursor: pointer; }
-.cell.on { background: var(--gate); }
-.cell:nth-child(4n+1) { box-shadow: inset 2px 0 0 #666; }
-
-.preview { margin-top: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 6px; }
-canvas { width: 100%; height: auto; display: block; }
-.legend { display: flex; justify-content: space-between; color: var(--muted); font-size: 10px; margin-top: 4px; }
-.legend .lt::before { content: ""; display: inline-block; width: 10px; height: 2px; background: var(--value); vertical-align: middle; margin-right: 4px; }
-.legend .lg::before { content: ""; display: inline-block; width: 8px; height: 8px; background: var(--gate); vertical-align: middle; margin-right: 4px; }
+#btnDetect { padding: 3px 8px; white-space: nowrap; }
 
 .actions { display: flex; gap: 8px; margin-top: 10px; }
 .actions .primary { flex: 1; }
 .status { margin-top: 8px; color: var(--muted); min-height: 32px; white-space: pre-wrap; }
 .status.err { color: #ff6b6b; }
 .status.ok { color: #6bd68b; }
+
+.more { margin-top: 10px; }
+.more summary { color: var(--muted); cursor: pointer; margin-bottom: 6px; user-select: none; }
+.more summary:hover { color: var(--text); }

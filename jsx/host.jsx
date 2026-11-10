@@ -435,3 +435,44 @@ function skipperReset() {
         return skErr(e.message || e);
     }
 }
+
+/**
+ * Song für die BPM-Erkennung finden: markierter Audioclip, sonst der Audioclip mit
+ * der größten Überlappung zum markierten Videoclip (ohne dessen eigenen Ton).
+ */
+function skipperSongInfo() {
+    try {
+        var seq = app.project.activeSequence;
+        if (!seq) return skErr('Keine aktive Sequenz.');
+        var s = skSelection(seq), song = null, i, j;
+        if (s.audio.length) {
+            song = s.audio[0];
+        } else if (s.video) {
+            var own = {};
+            try {
+                var linked = s.video.getLinkedItems();
+                for (i = 0; i < linked.numItems; i++) own[linked[i].nodeId] = true;
+            } catch (eL) {}
+            var v0 = s.video.start.seconds, v1 = s.video.end.seconds, best = 0;
+            for (i = 0; i < seq.audioTracks.numTracks; i++) {
+                var cs = seq.audioTracks[i].clips;
+                for (j = 0; j < cs.numItems; j++) {
+                    var c = cs[j];
+                    if (own[c.nodeId]) continue;
+                    var ov = Math.min(v1, c.end.seconds) - Math.max(v0, c.start.seconds);
+                    if (ov > best) { best = ov; song = c; }
+                }
+            }
+        }
+        if (!song) return skErr('Kein Song gefunden. Lege den Song auf eine Audiospur unter den Clip oder markiere ihn mit.');
+        var path = '';
+        try { path = song.projectItem.getMediaPath(); } catch (eP) {}
+        if (!path) return skErr('Dateipfad des Songs nicht gefunden.');
+        return skOk({
+            name: song.name, path: path,
+            start: song.start.seconds, end: song.end.seconds, inPoint: song.inPoint.seconds
+        });
+    } catch (e) {
+        return skErr(e.message || e);
+    }
+}

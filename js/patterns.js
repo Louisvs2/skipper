@@ -401,5 +401,5 @@
   };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
-  else root.SkipperPatterns = api;
-})(this);
+  if (root) root.SkipperPatterns = api;
+})(typeof window !== 'undefined' ? window : this);

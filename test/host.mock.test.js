@@ -88,4 +88,21 @@ assert.strictEqual(v2._clips.length, 5, 'alte Stücke ersetzt');
 selection = [v2._clips[1]]; // ein aktuelles Skipper-Stück auswählen
 res = JSON.parse(ctx.skipperReset());
 assert.ok(res.ok && res.removed === 5 && !orig.disabled && v2._clips.length === 0);
+// Song für die BPM-Erkennung: Audioclip mit größter Überlappung, ohne den eigenen Ton des Videos
+var ownAudio = makeClip(a1, 'clip.mp4', 2, 12, 3, 'Audio');
+var a2 = makeTrack(); at.push(a2); at.numTracks = 2;
+var songItem = { getMediaPath: function () { return '/Musik/song.wav'; } };
+var songClip = makeClip(a2, 'song.wav', 0, 30, 4, 'Audio'); songClip.projectItem = songItem;
+a1._clips.push(ownAudio); a2._clips.push(songClip);
+orig.getLinkedItems = function () { return Coll([orig, ownAudio]); };
+selection = [orig];
+var song = JSON.parse(ctx.skipperSongInfo());
+assert.ok(song.ok, song.error);
+assert.strictEqual(song.path, '/Musik/song.wav');
+assert.strictEqual(song.inPoint, 4);
+selection = [orig, songClip]; // explizit markierter Song gewinnt
+assert.strictEqual(JSON.parse(ctx.skipperSongInfo()).name, 'song.wav');
+selection = [];
+assert.ok(!JSON.parse(ctx.skipperSongInfo()).ok, 'ohne Auswahl -> Fehler');
+
 console.log('host.jsx Mock-Test bestanden (' + r.pieces.length + ' Stücke)');

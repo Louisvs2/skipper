@@ -50,31 +50,6 @@
     });
   }
 
-  function userSteps(id) {
-    var s = state.userGates[id];
-    if (!s || s.length !== 16) s = state.userGates[id] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-    return s;
-  }
-
-  function renderGrid() {
-    var g = P.findGateSlot(state.gateSlot);
-    var show = !!(g && g.user);
-    $('userGrid').hidden = !show;
-    if (!show) return;
-    var steps = userSteps(g.id), cells = $('cells');
-    cells.innerHTML = '';
-    steps.forEach(function (v, i) {
-      var c = document.createElement('div');
-      c.className = 'cell' + (v ? ' on' : '');
-      c.title = 'Step ' + (i + 1);
-      c.addEventListener('click', function () {
-        steps[i] = steps[i] ? 0 : 1;
-        save(); renderGrid(); drawPreview();
-      });
-      cells.appendChild(c);
-    });
-  }
-
   function setVal(id, v) {
     var el = $(id);
     if (document.activeElement === el && el.type === 'number') return; // Tippen nicht stören
@@ -98,8 +73,6 @@
     setVal('jump', state.jump);
     document.querySelector('output[for=timeMix]').textContent = state.timeMix + ' %';
     document.querySelector('output[for=gateMix]').textContent = state.gateMix + ' %';
-    renderGrid();
-    drawPreview();
   }
 
   function bind(id, key, parse) {
@@ -114,63 +87,13 @@
   }
   function num(v) { var n = parseFloat(v); return isNaN(n) ? null : n; }
 
-  // ------------------------------------------------------------ Vorschau
-  function drawPreview() {
-    var cv = $('preview'), ctx = cv.getContext('2d');
-    var W = cv.width, H = cv.height, gateH = 40, padT = 10, plotH = H - gateH - padT - 14;
-    ctx.clearRect(0, 0, W, H);
-    var slot = P.findTimeSlot(state.timeSlot);
-    var segs = slot.bar(0);
-
-    var lo = 0, hi = 16;
-    segs.forEach(function (s) {
-      var a = s.src, b = s.src + s.l * s.sp;
-      lo = Math.min(lo, a, b); hi = Math.max(hi, a, b);
-    });
-    function X(step) { return 4 + step / 16 * (W - 8); }
-    function Y(src) { return padT + plotH - (src - lo) / (hi - lo) * plotH; }
-
-    // Raster
-    for (var i = 0; i <= 16; i++) {
-      ctx.strokeStyle = i % 4 === 0 ? '#444' : '#2c2c2c';
-      ctx.beginPath(); ctx.moveTo(X(i) + 0.5, padT); ctx.lineTo(X(i) + 0.5, H - 2); ctx.stroke();
-    }
-    // Original (Diagonale)
-    ctx.strokeStyle = '#3c3c3c'; ctx.setLineDash([4, 4]);
-    ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(16), Y(16)); ctx.stroke();
-    ctx.setLineDash([]);
-    // Quellposition
-    ctx.strokeStyle = '#4f9cff'; ctx.lineWidth = 2;
-    segs.forEach(function (s) {
-      ctx.beginPath();
-      ctx.moveTo(X(s.s), Y(s.src));
-      ctx.lineTo(X(s.s + s.l), Y(s.src + s.l * s.sp));
-      ctx.stroke();
-    });
-    ctx.lineWidth = 1;
-    ctx.fillStyle = '#8a8a8a'; ctx.font = '10px sans-serif';
-    ['1', '2', '3', '4'].forEach(function (b, k) { ctx.fillText(b, X(k * 4) + 3, H - gateH - 3); });
-
-    // Gate
-    var frame = 1 / 100, barLen = 240 / (state.bpm || 120);
-    var keys = P.gateKeys({
-      bpm: state.bpm || 120, downbeat: 0, frameDur: frame, gateSlot: state.gateSlot,
-      gateMix: state.gateMix / 100, attackFrames: 0, releaseFrames: 0, userGates: state.userGates
-    }, 0, barLen);
-    var gy = H - 2, gh = gateH - 6;
-    ctx.fillStyle = 'rgba(227,179,65,.85)';
-    ctx.beginPath(); ctx.moveTo(X(0), gy);
-    keys.forEach(function (k) { ctx.lineTo(X(k.t / barLen * 16), gy - k.v * gh); });
-    ctx.lineTo(X(16), gy); ctx.closePath(); ctx.fill();
-  }
-
   // ------------------------------------------------------------ Aktionen
   function setStatus(msg, cls) {
     var el = $('status');
     el.textContent = msg;
     el.className = 'status' + (cls ? ' ' + cls : '');
   }
-  function busy(on) { $('btnApply').disabled = on; $('btnReset').disabled = on; }
+  function busy(on) { $('btnApply').disabled = on; $('btnReset').disabled = on; $('btnDetect').disabled = on; }
 
   function apply() {
     busy(true);
@@ -225,9 +148,54 @@
     }).catch(function (e) { setStatus(e.message, 'err'); });
   }
 
+  // ------------------------------------------------------------ BPM-Erkennung
+  function readFileBase64(path) {
+    var cep = window.cep;
+    if (!cep || !cep.fs) throw new Error('Dateizugriff nicht verfügbar (nur in Premiere).');
+    var r = cep.fs.readFile(path, cep.encoding.Base64);
+    if (r.err !== 0) throw new Error('Song-Datei konnte nicht gelesen werden (Fehler ' + r.err + '): ' + path);
+    return r.data;
+  }
+
+  function decodeAudio(arrayBuffer) {
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    var ctx = new Ctx();
+    return new Promise(function (resolve, reject) {
+      var done = function (buf) { try { ctx.close(); } catch (e) {} resolve(buf); };
+      var fail = function () { try { ctx.close(); } catch (e) {} reject(new Error('Audioformat wird nicht unterstützt. Bitte den Song als WAV oder MP3 verwenden.')); };
+      var p = ctx.decodeAudioData(arrayBuffer, done, fail);
+      if (p && p.catch) p.catch(fail);
+    });
+  }
+
+  function detectBpm() {
+    var B = window.SkipperBPM, song;
+    busy(true);
+    setStatus('Suche Song …');
+    callHost('skipperSongInfo()').then(function (info) {
+      song = info;
+      setStatus('Lese „' + song.name + '“ …');
+      return decodeAudio(B.base64ToArrayBuffer(readFileBase64(song.path)));
+    }).then(function (buf) {
+      setStatus('Analysiere …');
+      var len = Math.min(90, song.end - song.start);
+      var r = B.detect(B.monoSlice(buf, song.inPoint, len), buf.sampleRate);
+      state.bpm = r.bpm;
+      // Dateizeit -> Sequenzzeit
+      state.downbeat = Math.round((song.start + r.downbeat) * 1000) / 1000;
+      save(); syncFromState();
+      var msg = r.bpm + ' BPM erkannt (Song: ' + song.name + ').';
+      if (r.confidence < 0.4) setStatus(msg + '\nUnsicher – bitte prüfen und ggf. von Hand korrigieren.', 'err');
+      else setStatus(msg + ' Downbeat: ' + state.downbeat + ' s', 'ok');
+    }).catch(function (e) {
+      setStatus(e.message, 'err');
+    }).then(function () { busy(false); });
+  }
+
   // ------------------------------------------------------------ Start
   fillSelect($('timeSlot'), P.TIME_SLOTS);
-  fillSelect($('gateSlot'), P.GATE_SLOTS);
+  fillSelect($('gateSlot'), P.GATE_SLOTS.filter(function (g) { return !g.user; }));
+  if (!P.findGateSlot(state.gateSlot) || P.findGateSlot(state.gateSlot).user) state.gateSlot = 'open';
   bind('bpm', 'bpm', function (v) { v = num(v); return v && v > 0 ? v : null; });
   bind('downbeat', 'downbeat', num);
   bind('timeSlot', 'timeSlot');
@@ -243,5 +211,6 @@
   $('btnApply').addEventListener('click', apply);
   $('btnReset').addEventListener('click', reset);
   $('btnPlayhead').addEventListener('click', playheadAsDownbeat);
+  $('btnDetect').addEventListener('click', detectBpm);
   syncFromState();
 })();

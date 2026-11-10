@@ -4,6 +4,6 @@
   "private": true,
   "description": "BPM-synchrone Time- und Gate-Effekte als Panel für Adobe Premiere Pro",
   "scripts": {
-    "test": "node test/patterns.test.js && node test/host.mock.test.js"
+    "test": "node test/patterns.test.js && node test/bpm.test.js && node test/host.mock.test.js"
   }
 }
