@@ -5,7 +5,10 @@ SRC="$(cd "$(dirname "$0")" && pwd)"
 DEST="$HOME/Library/Application Support/Adobe/CEP/extensions/skipper"
 
 mkdir -p "$DEST"
-rsync -a --delete --exclude ".git" --exclude "test" --exclude "node_modules" "$SRC/" "$DEST/"
+rsync -a --delete --exclude ".git" --exclude "test" --exclude "node_modules" --exclude "docs" --exclude "dist" --exclude "*.pdf" "$SRC/" "$DEST/"
+
+# Download-Sperre von macOS entfernen (sonst lädt Premiere das Panel evtl. nicht)
+xattr -dr com.apple.quarantine "$DEST" 2>/dev/null || true
 
 # Unsignierte Erweiterungen erlauben (CEP 9–12 abdecken)
 for v in 9 10 11 12; do

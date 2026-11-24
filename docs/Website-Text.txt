@@ -1,0 +1,17 @@
+SKIPPER
+Beat-Effekte für Premiere Pro.
+
+Dein Video im Takt der Musik: Skipper lässt das Bild springen, stottern, scratchen und blinken, genau auf den Beat. Song drunter legen, Clip anklicken, „Erkennen“ drücken, Effekt wählen, fertig. Kein Schneiden von Hand, kein Zählen von Frames.
+
+- Erkennt das Tempo (BPM) deines Songs automatisch
+- 14 Zeit-Effekte: Stutter, Baby Scratch, Rewind, Glitch Shuffle, Boomerang und mehr
+- Gate-Effekte: Bild blinkt oder blendet im Rhythmus
+- Dein Original bleibt immer erhalten, mit „Reset“ ist alles wie vorher
+- In 5 Minuten installiert
+
+Für Adobe Premiere Pro auf dem Mac.
+
+—
+
+Kurzversion (1 Satz):
+Skipper schneidet dein Video automatisch im Takt der Musik: BPM erkennen, Effekt wählen, Apply.

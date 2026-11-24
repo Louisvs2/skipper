@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Skipper – Anleitung</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #fff; color: #000; }
+  body { font-family: "Inter", "Helvetica Neue", Arial, sans-serif; font-size: 10.5pt; line-height: 1.5; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  .page { width: 210mm; height: 297mm; padding: 24mm 22mm 20mm; position: relative; page-break-after: always; overflow: hidden; }
+  .page:last-child { page-break-after: auto; }
+  .foot { position: absolute; left: 22mm; right: 22mm; bottom: 12mm; display: flex; justify-content: space-between; font-size: 7.5pt; letter-spacing: .08em; text-transform: uppercase; color: #888; border-top: .5pt solid #000; padding-top: 3mm; }
+
+  .kicker { font-size: 8pt; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 6mm; }
+  h1 { font-family: "Inter Display", "Inter", sans-serif; font-weight: 800; font-size: 40pt; line-height: 1; letter-spacing: -.03em; margin-bottom: 8mm; }
+  h2 { font-family: "Inter Display", "Inter", sans-serif; font-weight: 700; font-size: 15pt; letter-spacing: -.01em; margin: 9mm 0 3mm; }
+  p { max-width: 145mm; }
+  p + p { margin-top: 3mm; }
+  .lead { font-size: 13pt; line-height: 1.45; max-width: 150mm; }
+  .muted { color: #777; }
+  hr { border: 0; border-top: .5pt solid #000; margin: 8mm 0; }
+  b { font-weight: 700; }
+
+  /* Titel */
+  .cover { display: flex; flex-direction: column; justify-content: space-between; }
+  .cover .top { font-size: 8pt; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; display: flex; justify-content: space-between; border-bottom: 1.5pt solid #000; padding-bottom: 4mm; }
+  .cover .title { font-family: "Inter Display", "Inter", sans-serif; font-weight: 900; font-size: 92pt; line-height: .9; letter-spacing: -.05em; }
+  .cover .sub { font-size: 20pt; font-weight: 300; letter-spacing: -.01em; margin-top: 6mm; }
+  .cover .bottom { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6mm; border-top: 1.5pt solid #000; padding-top: 4mm; font-size: 8.5pt; }
+  .cover .bottom div span { display: block; font-size: 7pt; letter-spacing: .14em; text-transform: uppercase; color: #777; margin-bottom: 1mm; }
+
+  /* Schritte */
+  .steps { list-style: none; margin-top: 6mm; }
+  .steps li { display: grid; grid-template-columns: 22mm 1fr; padding: 5mm 0; border-top: .5pt solid #000; }
+  .steps li:last-child { border-bottom: .5pt solid #000; }
+  .steps .n { font-family: "Inter Display", "Inter", sans-serif; font-weight: 800; font-size: 26pt; line-height: 1; }
+  .steps h3 { font-size: 11.5pt; font-weight: 700; margin-bottom: 1.5mm; }
+
+  code { font-family: "JetBrains Mono", monospace; font-size: 9pt; background: #eee; padding: .3mm 1.2mm; }
+  .cmd { font-family: "JetBrains Mono", monospace; font-size: 9pt; background: #000; color: #fff; padding: 4mm 5mm; margin-top: 3mm; word-break: break-all; }
+  .key { display: inline-block; border: .75pt solid #000; border-radius: 1.2mm; padding: 0 1.6mm; font-size: 8.5pt; font-weight: 600; line-height: 1.6; }
+
+  /* Zwei Spalten mit Bild */
+  .split { display: grid; grid-template-columns: 1fr 68mm; gap: 10mm; align-items: start; margin-top: 4mm; }
+  .shot { width: 100%; filter: grayscale(1) contrast(1.05); border: .5pt solid #000; }
+  .caption { font-size: 7.5pt; color: #777; margin-top: 2mm; letter-spacing: .04em; }
+
+  /* Tabellen */
+  table { width: 100%; border-collapse: collapse; margin-top: 4mm; }
+  th { text-align: left; font-size: 7.5pt; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; padding: 0 0 2mm; border-bottom: 1.5pt solid #000; }
+  td { padding: 2.4mm 4mm 2.4mm 0; border-bottom: .5pt solid #000; vertical-align: top; }
+  td:first-child { font-weight: 700; width: 46mm; }
+  .compact td { padding: 1.8mm 4mm 1.8mm 0; }
+  .terms td:first-child { width: 24mm; }
+  .sym { font-family: "DejaVu Sans", sans-serif; font-weight: 700; }
+
+  .note { border: 1.5pt solid #000; padding: 4mm 5mm; margin-top: 7mm; max-width: 166mm; }
+  .note .label { display: block; font-weight: 700; font-size: 7.5pt; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 1mm; }
+
+  .faq dt { font-weight: 700; padding-top: 4mm; border-top: .5pt solid #000; margin-top: 4mm; }
+  .faq dt:first-child { margin-top: 2mm; }
+  .faq dd { margin-top: 1mm; max-width: 155mm; }
+</style>
+</head>
+<body>
+
+<!-- 1 · Titel -->
+<section class="page cover">
+  <div class="top"><span>Plugin für Adobe Premiere Pro</span><span>Version 1.0</span></div>
+  <div>
+    <div class="title">Skipper.</div>
+    <div class="sub">Beat-Effekte für dein Video.<br>Installation &amp; Anleitung.</div>
+  </div>
+  <div class="bottom">
+    <div><span>Was</span>Bild springt, stottert und blinkt im Takt deines Songs</div>
+    <div><span>Für</span>Premiere Pro auf dem Mac</div>
+    <div><span>Dauer</span>5 Minuten zum Einrichten</div>
+  </div>
+</section>
+
+<!-- 2 · Was ist Skipper -->
+<section class="page">
+  <div class="kicker">01 — Überblick</div>
+  <h1>Was ist<br>Skipper?</h1>
+  <div class="split">
+    <div>
+      <p class="lead">Skipper schneidet deinen Clip im Takt der Musik neu zusammen. Das Bild springt zurück, stottert, läuft rückwärts oder blinkt im Beat.</p>
+      <p style="margin-top:6mm">Du musst dafür nichts von Hand schneiden. Skipper hört sich deinen Song an, findet das Tempo (BPM) selbst und macht den Rest mit einem Klick.</p>
+      <p>Dein Originalclip bleibt dabei immer erhalten. Gefällt dir etwas nicht, klickst du auf <b>Reset</b> und alles ist wie vorher.</p>
+      <h2>Zwei Begriffe, mehr brauchst du nicht</h2>
+      <table class="compact terms">
+        <tr><td>BPM</td><td>Das Tempo deines Songs: Schläge pro Minute. Skipper erkennt es automatisch.</td></tr>
+        <tr><td>Downbeat</td><td>Die „1“ im Takt, also der Moment, an dem ein neuer Takt beginnt.</td></tr>
+      </table>
+    </div>
+    <div>
+      <img class="shot" src="panel.png" alt="Das Skipper-Panel">
+      <div class="caption">Das Skipper-Fenster in Premiere</div>
+    </div>
+  </div>
+  <div class="foot"><span>Skipper</span><span>Überblick</span><span>02</span></div>
+</section>
+
+<!-- 3 · Installation -->
+<section class="page">
+  <div class="kicker">02 — Installation</div>
+  <h1>Einmal<br>einrichten.</h1>
+  <p class="lead">Vier Schritte. Du brauchst nur diese ZIP-Datei und Premiere Pro.</p>
+  <ol class="steps">
+    <li><div class="n">1</div><div>
+      <h3>ZIP entpacken</h3>
+      <p>Doppelklick auf <b>Skipper.zip</b> in deinem Downloads-Ordner. Es entsteht ein Ordner <b>skipper</b>. Lass ihn in „Downloads“ liegen.</p>
+    </div></li>
+    <li><div class="n">2</div><div>
+      <h3>Terminal öffnen</h3>
+      <p>Drück <span class="key">⌘</span> + <span class="key">Leertaste</span>, tippe <b>Terminal</b> und drück <span class="key">Enter</span>. Ein Fenster mit Text öffnet sich.</p>
+    </div></li>
+    <li><div class="n">3</div><div>
+      <h3>Diesen Befehl einfügen und Enter drücken</h3>
+      <div class="cmd">bash ~/Downloads/skipper/install-mac.sh</div>
+      <p style="margin-top:3mm">Am Ende steht dort <b>„Skipper installiert“</b>. Danach kannst du das Terminal schließen.</p>
+    </div></li>
+    <li><div class="n">4</div><div>
+      <h3>Premiere neu starten</h3>
+      <p>Premiere komplett beenden (<span class="key">⌘</span> + <span class="key">Q</span>) und neu öffnen. Dann im Menü: <b>Fenster → Erweiterungen → Skipper</b>.</p>
+    </div></li>
+  </ol>
+  <div class="note"><span class="label">Gut zu wissen</span>Das musst du nur einmal machen. Ab dann ist Skipper bei jedem Start von Premiere unter „Erweiterungen“ zu finden.</div>
+  <div class="foot"><span>Skipper</span><span>Installation</span><span>03</span></div>
+</section>
+
+<!-- 4 · Benutzen -->
+<section class="page">
+  <div class="kicker">03 — Benutzen</div>
+  <h1>In vier<br>Klicks.</h1>
+  <p class="lead">Leg den Song auf eine Audiospur und dein Video darüber. Dann:</p>
+  <ol class="steps">
+    <li><div class="n">1</div><div>
+      <h3>Clip anklicken</h3>
+      <p>Klick in der Timeline auf den Videoclip, den du bearbeiten willst.</p>
+    </div></li>
+    <li><div class="n">2</div><div>
+      <h3>„Erkennen“ drücken</h3>
+      <p>Skipper hört sich den Song unter dem Clip an und trägt <b>BPM</b> und <b>Downbeat</b> selbst ein.</p>
+    </div></li>
+    <li><div class="n">3</div><div>
+      <h3>Zwei Effekte wählen</h3>
+      <p><b>Time slot</b> legt fest, wie das Bild springt, zum Beispiel „Baby scratch 2 and 4“.<br>
+         <b>Gate slot</b> legt fest, wann das Bild im Takt kurz ausgeht, zum Beispiel „Eighth chop“.</p>
+    </div></li>
+    <li><div class="n">4</div><div>
+      <h3>„Apply“ drücken</h3>
+      <p>Fertig. Abspielen und anschauen. Nicht zufrieden? Anderen Effekt wählen, Clip anklicken, noch einmal <b>Apply</b>.</p>
+    </div></li>
+  </ol>
+  <div class="note"><span class="label">Tipp zum Start</span>Probier „Baby scratch 2 and 4“ mit <b>Time mix 50 %</b>. Dann passiert der Effekt nur in jedem zweiten Takt und wirkt nicht zu viel.</div>
+  <div class="foot"><span>Skipper</span><span>Benutzen</span><span>04</span></div>
+</section>
+
+<!-- 5 · Regler -->
+<section class="page">
+  <div class="kicker">04 — Die Regler</div>
+  <h1>Was macht<br>was?</h1>
+  <table>
+    <tr><th>Regler</th><th>Was er macht</th></tr>
+    <tr><td>BPM</td><td>Tempo des Songs. Wird mit „Erkennen“ automatisch ausgefüllt.</td></tr>
+    <tr><td>Downbeat (s)</td><td>Wo die „1“ im Takt liegt. Mit <span class="key sym">⌖</span> nimmst du die Stelle, an der gerade der Abspielkopf steht.</td></tr>
+    <tr><td>Time slot</td><td>Der Zeit-Effekt: wie das Bild springt, stottert oder rückwärts läuft.</td></tr>
+    <tr><td>Gate slot</td><td>Der Blink-Effekt: wann das Bild im Takt aus- und angeht.</td></tr>
+    <tr><td>Time mix</td><td>In wie vielen Takten der Zeit-Effekt passiert. 100 % = immer, 50 % = jeder zweite Takt.</td></tr>
+    <tr><td>Gate mix</td><td>Wie stark das Bild ausgeht. 100 % = ganz schwarz, 50 % = halb dunkel.</td></tr>
+  </table>
+  <h2>Unter „Mehr Einstellungen“</h2>
+  <p class="muted">Musst du normalerweise nicht anfassen.</p>
+  <table class="compact">
+    <tr><td>Link slots</td><td>Wählt automatisch einen passenden Gate slot zum Time slot.</td></tr>
+    <tr><td>Gate target</td><td>Was blinkt: das Bild, der Ton (markierte Audioclips) oder beides.</td></tr>
+    <tr><td>Gate attack / release</td><td>Wie weich das Bild an- und ausgeht, in Frames. Klein = hart, groß = weich.</td></tr>
+    <tr><td>Frame mode</td><td>Wie Zeitlupe aussieht: ruckelig (Sampling), weich (Blending) oder ganz flüssig (Optical Flow).</td></tr>
+    <tr><td>Jump dissolve</td><td>Kurze Überblendung an jeder Sprungstelle. 0 = harter Schnitt.</td></tr>
+  </table>
+  <div class="foot"><span>Skipper</span><span>Die Regler</span><span>05</span></div>
+</section>
+
+<!-- 6 · Muster -->
+<section class="page">
+  <div class="kicker">05 — Alle Effekte</div>
+  <h1>Die Muster.</h1>
+  <table class="compact">
+    <tr><th>Time slot</th><th>Was passiert</th></tr>
+    <tr><td>Bypass</td><td>Nichts, das Video läuft normal.</td></tr>
+    <tr><td>1/16 stutter, beat 4</td><td>Auf dem 4. Schlag stottert das Bild schnell.</td></tr>
+    <tr><td>Half-speed beat 4</td><td>Der 4. Schlag läuft in Zeitlupe.</td></tr>
+    <tr><td>Previous bar</td><td>Der letzte Takt wird wiederholt.</td></tr>
+    <tr><td>Downbeat cascade</td><td>Der erste Schlag wiederholt sich immer schneller.</td></tr>
+    <tr><td>Glitch shuffle</td><td>Kleine Stücke werden durcheinandergewürfelt.</td></tr>
+    <tr><td>Ping-pong eighths</td><td>Vorwärts, rückwärts, vorwärts, rückwärts.</td></tr>
+    <tr><td>Triplet tumble</td><td>Hüpft im Dreier-Rhythmus zurück.</td></tr>
+    <tr><td>Baby scratch 2 and 4</td><td>Auf Schlag 2 und 4 vor und zurück wie ein DJ.</td></tr>
+    <tr><td>Stop-motion build</td><td>Erst ruckelige Standbilder, dann wieder flüssig.</td></tr>
+    <tr><td>Bar remix</td><td>Die Schläge im Takt werden umsortiert.</td></tr>
+    <tr><td>Half-time boomerang</td><td>Langsam vorwärts, dann langsam zurück.</td></tr>
+    <tr><td>Rewind and spin-up</td><td>Spult zurück und läuft wieder an wie eine Platte.</td></tr>
+    <tr><td>Rubber band</td><td>Abwechselnd langsam und schnell, bleibt aber im Takt.</td></tr>
+  </table>
+  <table class="compact" style="margin-top:7mm">
+    <tr><th>Gate slot</th><th>Wann das Bild an ist</th></tr>
+    <tr><td>Open</td><td>Immer, kein Blinken.</td></tr>
+    <tr><td>Eighth chop / Sixteenth chop</td><td>An, aus, an, aus: schnell bzw. sehr schnell.</td></tr>
+    <tr><td>Offbeats</td><td>Nur zwischen den Schlägen.</td></tr>
+    <tr><td>Beats 1 and 3</td><td>Nur auf Schlag 1 und 3.</td></tr>
+    <tr><td>Trance A / Trance B</td><td>Typischer Club-Rhythmus.</td></tr>
+    <tr><td>Fade out / Fade in bar</td><td>Blendet über jeden Takt langsam aus bzw. ein.</td></tr>
+  </table>
+  <div class="foot"><span>Skipper</span><span>Alle Effekte</span><span>06</span></div>
+</section>
+
+<!-- 7 · Hilfe -->
+<section class="page">
+  <div class="kicker">06 — Hilfe</div>
+  <h1>Wenn etwas<br>nicht klappt.</h1>
+  <dl class="faq">
+    <dt>Skipper taucht unter „Erweiterungen“ nicht auf.</dt>
+    <dd>Premiere wirklich ganz beenden (<span class="key">⌘</span> + <span class="key">Q</span>) und neu starten. Hilft das nicht, Installation Schritt 3 noch einmal ausführen.</dd>
+
+    <dt>Die BPM sind falsch oder es steht „Unsicher“.</dt>
+    <dd>Trag das Tempo einfach von Hand ein. Oft ist es nur das Doppelte oder die Hälfte, z. B. 64 statt 128.</dd>
+
+    <dt>Der Effekt ist nicht genau auf dem Beat.</dt>
+    <dd>Stell den Abspielkopf genau auf eine „1“ im Song (z. B. einen lauten Kick), drück <span class="key sym">⌖</span> und dann noch einmal <b>Apply</b>.</dd>
+
+    <dt>Es wird der falsche Song erkannt.</dt>
+    <dd>Halte <span class="key">⇧</span> gedrückt und klick zusätzlich auf den richtigen Song-Clip. Dann <b>Erkennen</b>.</dd>
+
+    <dt>Ich will alles rückgängig machen.</dt>
+    <dd>Clip anklicken und <b>Reset</b> drücken. Das Original ist sofort wieder da.</dd>
+
+    <dt>Ich finde meinen Originalclip nicht mehr.</dt>
+    <dd>Er liegt noch an derselben Stelle, nur ausgegraut (deaktiviert). Die neuen Stücke liegen auf der Spur darüber und heißen „[skipper] …“.</dd>
+  </dl>
+  <div class="note"><span class="label">Wichtig</span>Der Zeit-Effekt verändert nur das Bild. Leg deinen Song deshalb immer auf eine eigene Audiospur.</div>
+  <div class="foot"><span>Skipper</span><span>Hilfe</span><span>07</span></div>
+</section>
+
+</body>
+</html>
